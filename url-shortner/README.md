@@ -1,157 +1,239 @@
-# RootGeek - Self-Hosted Tracking & Link Intelligence
+# Easy2Use URL Shortener with IP Logging
 
-Modern, UI/UX-focused short-link and click intelligence tool for **authorized security testing**.
+Self-hosted URL shortener with click logging & simple admin panel.  
+Developed by **RootGeek**.
 
-Dieses Projekt ist so gedacht, dass es problemlos auf einem **Ubuntu-Server (z.B. Hetzner)** läuft,
-ohne scary Fehlermeldungen wie `externally-managed-environment` zu erzeugen.
+> ⚠️ **Disclaimer**
+> This tool is intended for **legal & authorized** use only  
+> (personal projects, internal testing, pentests with permission, etc.).  
+> Comply with GDPR & local laws. You bear full responsibility.
 
-## TL;DR Deployment auf Ubuntu (z.B. Hetzner)
+---
 
-**Alles wird in einem eigenen Virtual Environment installiert.**  
-Keine System-Python-Zerstörung, keine Warnungen, keine Panik.
+## Features
 
-### 1. Voraussetzung (als root oder mit sudo)
+- 🌑 **Dark Mode only**
+  - Fixed dark mode, no toggle.
+  - Minimalist, clean UI.
+
+- 🔗 **URL Shortener**
+  - Create short links to any target URLs.
+  - Optional custom slugs.
+  - Clear overview of all links.
+
+- 🕵️ **IP & Request Logging**
+  Per click, the following can be stored:
+  - IP address
+  - Timestamp
+  - User-Agent
+  - Referrer
+  - Accept-Language
+
+- 📊 **Per-Link Analytics**
+  - Detailed view with all clicks.
+  - Suitable for analysis & monitoring.
+
+- 🗑️ **Link Management**
+  - Comfortably delete links in the panel.
+  - (Depending on implementation) associated logs can be removed.
+
+- 🗄️ **Self-Hosted & Lightweight**
+  - FastAPI + SQLite
+  - No third-party APIs, no cloud dependency.
+
+---
+
+## Quickstart (with `start.sh`)
+
+The project includes a start script to simplify setup & startup.
+
+### 1. Prerequisites
+
+On Ubuntu, for example:
 
 ```bash
-apt update
-apt install -y python3 python3-venv python3-pip git
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip git
 ```
 
-### 2. Benutzer für RootGeek anlegen (empfohlen, optional)
+### 2. Clone Repository
 
 ```bash
-useradd -m -s /bin/bash linkscope
-su - linkscope
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
 ```
 
-### 3. Projekt holen
+### 3. Make Script Executable
 
 ```bash
-git clone <DEIN_REPO_LINK> linkscope_app
-cd linkscope_app
+chmod +x start.sh
 ```
 
-### 4. Virtual Environment erstellen (verhindert PEP-668 Fehlermeldung)
+### 4. Start
+
+```bash
+./start.sh
+```
+
+What the script typically does (depending on your version):
+
+- creates a virtual environment (.venv) if not present
+- installs packages from requirements.txt
+- sets up necessary structure/files (e.g., database)
+- starts the FastAPI app via uvicorn
+
+After successful start:
+
+```
+http://YOUR_SERVER_IP:8000
+```
+
+or (if configured in the script):
+
+```
+https://YOUR_SERVER_IP:PORT
+```
+
+Check the script output, which will show:
+
+- which URL
+- which port
+- whether HTTP or HTTPS
+- possibly hints about certificates / self-signed certificate
+
+---
+
+## Manual Installation (without start.sh)
+
+If you prefer to maintain control yourself or don't want to use the script:
+
+### 1. Virtual Environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 5. Requirements installieren (jetzt ohne Fehlermeldung)
+### 2. Dependencies
 
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 6. Server starten
+### 3. Set Environment Variables (recommended)
+
+```bash
+export SECRET_KEY="a-long-random-and-secret-key"
+export DATABASE_URL="sqlite:///./shortener.db"
+```
+
+- **SECRET_KEY**: Required for production – long, random, secret.
+- **DATABASE_URL**: Standard SQLite file in project folder.
+
+### 4. Start Server
 
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Beim ersten Start erscheint im Terminal:
+Then in browser:
 
-```text
-[RootGeek] Initial admin created:
-  Username: admin
-  Password: <RANDOM_PASSWORD>
+```
+http://YOUR_SERVER_IP:8000
 ```
 
-Im Browser aufrufen:
+For production:
 
-```text
-http://DEINE_SERVER_IP:8000
-```
-
-### 7. HTTPS (empfohlen, kurz)
-
-Setze RootGeek hinter einen Reverse Proxy wie nginx oder Caddy und aktiviere Let's Encrypt.  
-Beispiel-Setup kannst du in der Doku oder Präsentation zeigen.
+- place behind nginx/Traefik
+- enable HTTPS
+- configure SECRET_KEY & cookies securely
 
 ---
 
-## Warum keine `externally-managed-environment` Meldung mehr?
+## Login & Admin
 
-- Diese Meldung kommt nur, wenn du versuchst, global mit `pip` in das System-Python von Ubuntu zu installieren.
-- In unserer Anleitung nutzen wir konsequent ein **Virtual Environment in deinem Projektordner**:
-  - `python3 -m venv .venv`
-  - `source .venv/bin/activate`
-- Innerhalb des Venv ist `pip install -r requirements.txt` komplett sauber und zeigt diese Meldung nicht.
+The admin panel is protected.
+
+The exact implementation depends on your code, typical workflow:
+
+1. On first start, create a user/account (via setup route, script, or directly in DB).
+2. Login via web interface.
+3. Sessions run via signed cookies.
+
+Recommendations:
+
+- Strong passwords.
+- Panel only for you / trusted IPs (firewall / VPN / reverse proxy).
 
 ---
 
-## Features (Kurzfassung)
+## Usage
 
-- FastAPI + SQLite, komplett self-hosted
-- Auto-Admin beim ersten Start (Zugangsdaten im Terminal)
-- Login mit sicheren Cookies
-- Dashboard:
-  - Total Links, Total Clicks, Clicks Today, Unique IPs
-  - Mini-Chart der letzten 7 Tage
-  - Recent Click Stream
-- Links:
-  - Erstellen mit Target-URL, Custom Slug, Tags, Ablaufdatum, Max Clicks
-  - Detailseite mit allen Klick-Daten
-- Tracking:
-  - `/r/{slug}` leitet weiter und loggt IP, User-Agent, Client-Typ, Referrer, Accept-Language & Timestamp
-- UI/UX:
-  - Dark, modern, Tailwind, Karten, Copy-Buttons
-- Hinweistexte zu Legal/Ethik integriert
+### Create Short Link
 
-Nur für autorisierte Tests. Du bist für den Einsatz verantwortlich.
+1. Log in.
+2. Enter target URL.
+3. Optional: set custom slug.
+4. Save.
 
+You'll get, for example:
 
-## Schnellstart (empfohlen)
-
-Auf einem frischen Ubuntu-Server (z.B. Hetzner):
-
-```bash
-apt update
-apt install -y python3 python3-venv python3-pip git
-git clone <DEIN_REPO_LINK> linkscope_app
-cd linkscope_app
-bash start.sh
+```
+https://YOUR_HOST/abc123
 ```
 
-Danach erreichst du die Oberfläche unter:
+### View Clicks & Logs
 
-```text
-http://DEINE_SERVER_IP:8000
-```
+In the link detail view:
 
-Beim ersten Start werden die Admin-Zugangsdaten im Terminal angezeigt.
+- List of all visits
+- Date/Time
+- IP
+- User-Agent
+- Referrer
+- Language
 
+### Delete Links
 
-## Auto-Start & HTTPS
+In the panel:
 
-Empfohlene Nutzung auf Ubuntu:
+- Remove links
+- (depending on implementation) delete logs along with them
 
-```bash
-apt update
-apt install -y python3 python3-venv python3-pip git openssl
-unzip linkscope_app_final.zip -d linkscope_app
-cd linkscope_app
-bash start.sh
-```
+---
 
-Das Script:
+## Deployment Recommendations
 
-- erstellt `.venv`
-- installiert Dependencies
-- erzeugt beim ersten Start ein selbstsigniertes Zertifikat (`cert.pem`, `key.pem`, gültig 10 Jahre)
-- startet den Server via HTTPS auf Port `8443`
+For clean production operation:
 
-Aufruf im Browser:
+1. **Reverse Proxy** (nginx/Traefik) in front of the Uvicorn server.
+2. **HTTPS** enforcement (Let's Encrypt).
+3. Strong **SECRET_KEY**.
+4. **Protect Admin Panel**:
+   - IP restriction / VPN / additional auth.
+5. Regular **backups** of SQLite DB.
 
-```text
-https://DEINE_SERVER_IP:8443
-```
+---
 
-(Browser-Warnung wegen selbstsigniertem Zertifikat ist normal.)
+## Legal
 
-## Link-Verwaltung
+IP logging & tracking creates personal data.
 
-- Links können jetzt in der Links-Liste über einen **Delete-Button** gelöscht werden.
-- Auf der Detailseite eines Links kannst du eine Auto-Refresh-Periode wählen (z.B. alle 5 Sekunden), damit neue Klicks automatisch erkannt werden.
+You should:
+
+- clearly inform (privacy notice / disclaimer).
+- only use where you have legal basis + permission.
+- **not misuse** the tool for:
+  - Phishing
+  - Doxxing / Stalking
+  - covert surveillance
+  - other illegal actions
+
+---
+
+## Credits
+
+Developed by **RootGeek**.
+
+Technologies: FastAPI, Uvicorn, SQLite, Tailwind, Jinja2.
