@@ -4,110 +4,110 @@ Self-hosted URL shortener with click logging & simple admin panel.
 Developed by **RootGeek**.
 
 > ⚠️ **Disclaimer**
-> Dieses Tool ist nur für **legale & autorisierte** Einsatzzwecke gedacht  
-> (eigene Projekte, interne Tests, Pentests mit Erlaubnis etc.).  
-> Halte dich an DSGVO & lokale Gesetze. Du trägst die volle Verantwortung.
+> This tool is intended for **legal & authorized** use only  
+> (personal projects, internal testing, pentests with permission, etc.).  
+> Comply with GDPR & local laws. You bear full responsibility.
 
 ---
 
 ## Features
 
 - 🌑 **Dark Mode only**
-  - Fester Dark Mode, kein Umschalter.
-  - Minimalistisches, klares UI.
+  - Fixed dark mode, no toggle.
+  - Minimalist, clean UI.
 
 - 🔗 **URL Shortener**
-  - Erstelle Kurzlinks zu beliebigen Ziel-URLs.
-  - Optional eigene Slugs.
-  - Übersichtliche Liste aller Links.
+  - Create short links to any target URLs.
+  - Optional custom slugs.
+  - Clear overview of all links.
 
-- 🕵️ **IP- & Request-Logging**
-  Pro Klick können u.a. gespeichert werden:
-  - IP-Adresse
+- 🕵️ **IP & Request Logging**
+  Per click, the following can be stored:
+  - IP address
   - Timestamp
   - User-Agent
   - Referrer
   - Accept-Language
 
 - 📊 **Per-Link Analytics**
-  - Detailansicht mit allen Klicks.
-  - Geeignet für Auswertung & Monitoring.
+  - Detailed view with all clicks.
+  - Suitable for analysis & monitoring.
 
-- 🗑️ **Link-Management**
-  - Links komfortabel im Panel löschen.
-  - (Je nach Implementierung) zugehörige Logs mitentfernbar.
+- 🗑️ **Link Management**
+  - Comfortably delete links in the panel.
+  - (Depending on implementation) associated logs can be removed.
 
 - 🗄️ **Self-Hosted & Lightweight**
   - FastAPI + SQLite
-  - Keine Fremd-APIs, kein Cloud-Zwang.
+  - No third-party APIs, no cloud dependency.
 
 ---
 
-## Quickstart (mit `start.sh`)
+## Quickstart (with `start.sh`)
 
-Das Projekt bringt ein Start-Script mit, um dir Setup & Start zu erleichtern.
+The project includes a start script to simplify setup & startup.
 
-### 1. Voraussetzungen
+### 1. Prerequisites
 
-Auf z. B. Ubuntu:
+On Ubuntu, for example:
 
 ```bash
 sudo apt update
 sudo apt install -y python3 python3-venv python3-pip git
 ```
 
-### 2. Repository klonen
+### 2. Clone Repository
 
 ```bash
-git clone https://github.com/DEIN_USERNAME/DEIN_REPO.git
-cd DEIN_REPO
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
 ```
 
-### 3. Script ausführbar machen
+### 3. Make Script Executable
 
 ```bash
 chmod +x start.sh
 ```
 
-### 4. Starten
+### 4. Start
 
 ```bash
 ./start.sh
 ```
 
-Was das Script typischerweise macht (abhängig von deiner Version):
+What the script typically does (depending on your version):
 
-- erstellt eine virtuelle Umgebung (.venv), falls nicht vorhanden
-- installiert die Pakete aus requirements.txt
-- richtet die notwendige Struktur/Dateien ein (z. B. Datenbank)
-- startet die FastAPI-App über uvicorn
+- creates a virtual environment (.venv) if not present
+- installs packages from requirements.txt
+- sets up necessary structure/files (e.g., database)
+- starts the FastAPI app via uvicorn
 
-Nach erfolgreichem Start:
-
-```
-http://DEINE_SERVER_IP:8000
-```
-
-oder (wenn im Script konfiguriert):
+After successful start:
 
 ```
-https://DEINE_SERVER_IP:PORT
+http://YOUR_SERVER_IP:8000
 ```
 
-Schau in den Output des Scripts, dort steht:
+or (if configured in the script):
 
-- welche URL
-- welcher Port
-- ob HTTP oder HTTPS
-- evtl. Hinweise auf Zertifikate / selbstsigniertes Zertifikat
+```
+https://YOUR_SERVER_IP:PORT
+```
+
+Check the script output, which will show:
+
+- which URL
+- which port
+- whether HTTP or HTTPS
+- possibly hints about certificates / self-signed certificate
 
 ---
 
-## Manuelle Installation (ohne start.sh)
+## Manual Installation (without start.sh)
 
-Falls du die Kontrolle lieber selbst übernimmst oder das Script nicht nutzen willst:
+If you prefer to maintain control yourself or don't want to use the script:
 
-### 1. Virtuelle Umgebung
+### 1. Virtual Environment
 
 ```bash
 python3 -m venv .venv
@@ -121,119 +121,119 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 3. Environment Variablen setzen (empfohlen)
+### 3. Set Environment Variables (recommended)
 
 ```bash
-export SECRET_KEY="ein-langer-zufälliger-und-geheimer-key"
+export SECRET_KEY="a-long-random-and-secret-key"
 export DATABASE_URL="sqlite:///./shortener.db"
 ```
 
-- **SECRET_KEY**: Pflicht für Produktion – lang, zufällig, geheim.
-- **DATABASE_URL**: Standard SQLite-Datei im Projektordner.
+- **SECRET_KEY**: Required for production – long, random, secret.
+- **DATABASE_URL**: Standard SQLite file in project folder.
 
-### 4. Server starten
+### 4. Start Server
 
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Dann im Browser:
+Then in browser:
 
 ```
-http://DEINE_SERVER_IP:8000
+http://YOUR_SERVER_IP:8000
 ```
 
-Für Produktion:
+For production:
 
-- vor nginx/Traefik hängen
-- HTTPS aktivieren
-- SECRET_KEY & Cookies sicher konfigurieren
+- place behind nginx/Traefik
+- enable HTTPS
+- configure SECRET_KEY & cookies securely
 
 ---
 
 ## Login & Admin
 
-Das Admin-Panel ist geschützt.
+The admin panel is protected.
 
-Die genaue Umsetzung hängt von deinem Code ab, typischer Ablauf:
+The exact implementation depends on your code, typical workflow:
 
-1. Beim ersten Start einen Benutzer/Account anlegen (via Setup-Route, Script oder direkt in der DB).
-2. Login über die Weboberfläche.
-3. Sitzungen laufen über signierte Cookies.
+1. On first start, create a user/account (via setup route, script, or directly in DB).
+2. Login via web interface.
+3. Sessions run via signed cookies.
 
-Empfehlungen:
+Recommendations:
 
-- Starke Passwörter.
-- Panel nur für dich / vertraute IPs (Firewall / VPN / Reverse Proxy).
+- Strong passwords.
+- Panel only for you / trusted IPs (firewall / VPN / reverse proxy).
 
 ---
 
-## Nutzung
+## Usage
 
-### Kurzlink erstellen
+### Create Short Link
 
-1. Einloggen.
-2. Ziel-URL eintragen.
-3. Optional: eigenen Slug setzen.
-4. Speichern.
+1. Log in.
+2. Enter target URL.
+3. Optional: set custom slug.
+4. Save.
 
-Du bekommst z. B.:
+You'll get, for example:
 
 ```
-https://DEIN_HOST/abc123
+https://YOUR_HOST/abc123
 ```
 
-### Klicks & Logs ansehen
+### View Clicks & Logs
 
-In der Link-Detailansicht:
+In the link detail view:
 
-- Liste aller Aufrufe
-- Datum/Uhrzeit
+- List of all visits
+- Date/Time
 - IP
 - User-Agent
 - Referrer
-- Sprache
+- Language
 
-### Links löschen
+### Delete Links
 
-Im Panel:
+In the panel:
 
-- Links entfernen
-- (je nach Implementierung) Logs mit löschen
-
----
-
-## Deployment-Empfehlungen
-
-Für einen sauberen produktiven Betrieb:
-
-1. **Reverse Proxy** (nginx/Traefik) vor den Uvicorn-Server.
-2. **HTTPS** erzwingen (Let's Encrypt).
-3. Starker **SECRET_KEY**.
-4. **Admin-Panel schützen**:
-   - IP-Restriktion / VPN / zusätzliche Auth.
-5. Regelmäßige **Backups** der SQLite-DB.
+- Remove links
+- (depending on implementation) delete logs along with them
 
 ---
 
-## Rechtliches
+## Deployment Recommendations
 
-Durch IP-Logging & Tracking entstehen personenbezogene Daten.
+For clean production operation:
 
-Du solltest:
+1. **Reverse Proxy** (nginx/Traefik) in front of the Uvicorn server.
+2. **HTTPS** enforcement (Let's Encrypt).
+3. Strong **SECRET_KEY**.
+4. **Protect Admin Panel**:
+   - IP restriction / VPN / additional auth.
+5. Regular **backups** of SQLite DB.
 
-- klar informieren (Privacy-Hinweis / Disclaimer).
-- nur dort einsetzen, wo du eine Rechtsgrundlage + Erlaubnis hast.
-- das Tool **nicht missbrauchen** für:
+---
+
+## Legal
+
+IP logging & tracking creates personal data.
+
+You should:
+
+- clearly inform (privacy notice / disclaimer).
+- only use where you have legal basis + permission.
+- **not misuse** the tool for:
   - Phishing
   - Doxxing / Stalking
-  - heimliche Überwachung
-  - sonstige strafbare Aktionen
+  - covert surveillance
+  - other illegal actions
 
 ---
 
 ## Credits
 
-Entwickelt von **RootGeek**.
+Developed by **RootGeek**.
 
-Technologien: FastAPI, Uvicorn, SQLite, Tailwind, Jinja2.
+Technologies: FastAPI, Uvicorn, SQLite, Tailwind, Jinja2.
