@@ -1,0 +1,76 @@
+body {
+    font-size: 0.9rem;
+}
+
+/* Sidebar Links */
+.nav-link {
+    display: block;
+    padding: 0.6rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    color: rgb(148 163 253 / 0.75);
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+}
+.nav-link:hover {
+    background-color: rgba(15,23,42,0.95);
+    color: rgb(196 181 253);
+    border-color: rgba(129,140,248,0.35);
+}
+
+/* Stat Cards */
+.stat-card {
+    padding: 1rem 1.1rem;
+    border-radius: 1.5rem;
+    background: radial-gradient(circle at top left, rgba(129,140,248,0.16), rgba(15,23,42,0.98));
+    border: 1px solid rgba(75,85,99,0.6);
+    box-shadow: 0 20px 45px rgba(15,23,42,0.9);
+}
+.stat-label {
+    font-size: 0.7rem;
+    color: rgb(148 163 253 / 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+}
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgb(241,245,249);
+    margin-top: 0.15rem;
+}
+
+/* Inputs */
+.input {
+    width: 100%;
+    padding: 0.55rem 0.8rem;
+    border-radius: 1.3rem;
+    border: 1px solid rgba(75,85,99,0.9);
+    background-color: rgba(2,6,23,0.98);
+    font-size: 0.8rem;
+    color: rgb(226,232,240);
+    outline: none;
+    transition: all 0.16s ease;
+}
+.input::placeholder {
+    color: rgb(100,116,139);
+}
+.input:focus {
+    border-color: rgba(129,140,248,0.9);
+    box-shadow: 0 0 0 1px rgba(129,140,248,0.18);
+}
+
+/* Scrollbars */
+.custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(75,85,99,0.9) transparent;
+}
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(75,85,99,0.9);
+    border-radius: 999px;
+}

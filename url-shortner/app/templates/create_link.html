@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-xl space-y-4">
+    <div>
+        <div class="text-sm uppercase text-slate-500 tracking-[0.18em]">New Tracking Link</div>
+        <div class="text-xs font-semibold text-slate-100">Configure & Generate</div>
+        <p class="text-[11px] text-slate-500 mt-1">
+            Create a short tracking URL for authorized security tests, awareness campaigns, or lab exercises.
+        </p>
+    </div>
+    <form method="post" class="space-y-3 bg-slate-950/80 border border-slate-800/80 rounded-3xl p-4">
+        <div class="space-y-1.5">
+            <label class="text-[11px] text-slate-400">Target URL</label>
+            <input name="target_url" required placeholder="https://example.com"
+                   class="input">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+                <label class="text-[11px] text-slate-400">Custom Slug (optional)</label>
+                <input name="slug" placeholder="phish-training-01" class="input">
+            </div>
+            <div class="space-y-1.5">
+                <label class="text-[11px] text-slate-400">Tags (optional)</label>
+                <input name="tags" placeholder="awareness, internal-lab" class="input">
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+                <label class="text-[11px] text-slate-400">Expires At (optional)</label>
+                <input type="datetime-local" name="expires_at" class="input">
+            </div>
+            <div class="space-y-1.5">
+                <label class="text-[11px] text-slate-400">Max Clicks (optional)</label>
+                <input type="number" name="max_clicks" min="1" class="input" placeholder="e.g. 50">
+            </div>
+        </div>
+        <div class="flex items-center justify-between gap-2 pt-1">
+            <p class="text-xs text-slate-500">
+                Data collected: IP, User-Agent, Accept-Language, Referrer, timestamp. Use ethically.
+            </p>
+            <button type="submit"
+                    class="px-3 py-1.5 rounded-2xl bg-indigo-500/90 hover:bg-indigo-400/90 text-sm text-slate-950 font-semibold transition shadow-md shadow-indigo-900/40">
+                Create Link
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
