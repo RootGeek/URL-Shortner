@@ -1,1 +1,0 @@
-# RootGeek application package
